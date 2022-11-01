@@ -1,6 +1,6 @@
 <?php
 
-require_once ('helpers.php');
+require_once('core/helpers.php');
 $isAuth = (bool) rand(0,1);
 
 $categories=[
@@ -43,3 +43,4 @@ $page = include_template("layout.php",[
 
 print ($page);
 ?>
+

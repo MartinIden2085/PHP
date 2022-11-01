@@ -11,7 +11,7 @@
  *
  * @param string $date Дата в виде строки
  *
- * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
+ * @return bool True при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
 function is_date_valid(string $date) : bool {
     $format_to_check = 'Y-m-d';
@@ -77,7 +77,7 @@ function include_template($name, array $data = []) {
     $result = '';
 
     if (!is_readable($name)) {
-        return $result;
+       die("Файл <b>$name</b> не существует");
     }
 
     ob_start();
