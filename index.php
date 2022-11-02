@@ -1,34 +1,19 @@
 <?php
 
 require_once('core/helpers.php');
+require_once('core/init.php');
+
+/**
+ * @var PDO $con
+ */
+
 $isAuth = (bool) rand(0,1);
 
-$categories=[
-        "Путешествия",
-        "Наука и технологии",
-        "Лайфхаки",
-        "Мотивация",
-        "Переводы песен",
-        "Фильмы и сериалы"
-];
-$posts=[
-        [
-                "title"=>"Опасные жесты в разных странах",
-                "category"=>"Путешествия",
-                "photo"=>"img/1.jpg"
-        ],
-    [
-        "title"=>"IT словарь и популярные компьютерные термины",
-        "category"=>"Наука и технологии",
-        "photo"=>"img/2.jpg"
-    ],
-    [
-        "title"=>"Лайфхаки для запоминания новых английских слов",
-        "category"=>"Лайфхаки",
-        "photo"=>"img/3.jpg"
-    ]
+$categoriesObject=$con->query('SELECT * from categories');
+$categories=$categoriesObject->fetchAll();
 
-];
+$postsObject=$con->query('SELECT p.id, p.title, p.img_url, c.title as category from posts p JOIN categories c on p.category_id = c.id' );
+$posts = $postsObject->fetchAll();
 
 $indexContent = include_template("index-template.php", [
     'isAuth'=>$isAuth,
@@ -40,7 +25,6 @@ $page = include_template("layout.php",[
     'isAuth'=>$isAuth,
     'content'=>$indexContent
 ]);
-
 print ($page);
 ?>
 
