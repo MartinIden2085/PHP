@@ -5,7 +5,7 @@
                 <h1>Добавление поста</h1>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Введи название поста" name="title" value="<?= getPostVal('title')?>">
+                <input type="text" class="form-control" placeholder="Введи название поста" name="title" value="<?=getPostVal('title')?>">
                 <span class="text-danger"> <?= $errors['title'] ?? "" ?></span>
             </div>
             <div class="form-group mt-4">
