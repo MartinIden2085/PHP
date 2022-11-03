@@ -1,75 +1,70 @@
 <?php
 
-$isAuth = (bool) rand(0,1);
+require_once ('core/init.php');
 
+/**
+ * @var PDO $con
+ * @var Array $categories
+ * @var bool $isAuth
+ */
+
+$errors = [];
+$cats_ids = array_column($categories, 'id');
+$post = $_POST;
+$rules = [
+    'category_id'=>function($value) use ($cats_ids){
+        return validateCategory($value,$cats_ids);
+    },
+    'title'=>function(){
+        return validateFilled('title');
+    },
+    'description'=>function(){
+        return validateFilled('description');
+    }
+];
+
+$file_rule=function (){
+    if(!validateImage()){
+        return "Загрузите картинку в формате jpg, jpeg или png";
+    }
+};
+
+if($_SERVER['REQUEST_METHOD']=='POST'){
+    foreach ($post as $key=>$value){
+        if(isset($rules[$key])){
+            $rule=$rules[$key];
+            $errors[$key]=$rule($value);
+        }
+    }
+    $errors['photo']=$file_rule();
+}
+$errors=array_filter($errors);
+
+if ($isAuth===false){
+    header('Location: login.php');
+    exit;
+}
+
+if($_SERVER['REQUEST_METHOD']=='POST' && empty($errors) ){
+
+    $file_name=$_FILES['photo']['name'];
+    $uniq_url=uniqid();
+    $post['img_url']='uploads/' . $uniq_url . $file_name;
+    $post['user_id']=$_SESSION["user_id"];
+    move_uploaded_file($_FILES['photo']['tmp_name'], $post['img_url']);
+
+    $stmt=$con->prepare('INSERT INTO post SET title=:title, user_id=:id, category_id=:category_id, description=:description, img_url=:img_url');
+    $stmt->execute($post);
+    header("Location: single.php?id=" . $con->lastInsertId());
+}
+
+$addpostContent=include_template('pages/add-post-template.php',[
+    'categories'=>$categories,
+    'errors'=>$errors
+]);
+$page= include_template('layout.php',[
+        'isAuth'=>$isAuth,
+        'content'=>$addpostContent
+]);
+print ($page);
 ?>
-<!doctype html>
-<html lang="ru">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Бложик</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-        <link rel="stylesheet" href="css/utility.css">
-    </head>
-    <body class="d-flex flex-column bg-light">
-        <header>
-            <div class="container">
-                <div class="row bg-dark text-white p-3 align-items-center text-center">
-                    <div class="col-md-4 text-md-left text-start">
-                        <h1>Блог обо всем</h1>
-                    </div>
-                    <div class="col-md-8 text-md-right text-end">
-                        <?php if($isAuth === true): ?>
-                            <a class="btn btn-success" href="#" role="button">Добавить пост</a>
-                            <a class="btn btn-warning" href="/auth" role="button">Мои посты</a>
-                            <a class="btn btn-secondary" href="/auth" role="button">Выйти</a>
-                        <?php else: ?>
-                            <a class="btn btn-primary" href="/auth" role="button">Регистрация</a>
-                            <a class="btn btn-primary" href="/auth" role="button">Войти</a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <main class="m-2 flex-grow-1">
-            <div class="container h-100">
-                <div class="row justify-content-center align-items-center h-100">
-                    <form method="post" class="col-md-6 text-center">
-                        <div  class="form-group">
-                            <h1>Добавление поста</h1>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Введи название поста">
-                        </div>
-                        <div class="form-group mt-4">
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                                <option selected disabled>Выберите категорию</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="font-weight-bold">Введите описание</label>
-                            <textarea class="form-control" cols="20" rows="10"></textarea>
-                        </div>
-                        <div class="custom-file form-group mt-4">
-                            <input class="form-control form-control-lg" id="formFileLg" type="file">
-                        </div>
-                        <button type="submit" class="btn btn-primary mt-3 w-100">Добавить</button>
-                    </form>
-                </div>
-            </div>
-        </main>
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 bg-dark text-white p-3">
-                        <p class="text-center align-self-center mb-0">Все права соблюдены 2021</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </body>
-</html>
