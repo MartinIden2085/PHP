@@ -6,7 +6,6 @@ require_once ('core/init.php');
 /**
  * @var PDO $con
  */
-$isAuth=(bool) rand(0,1);
 
 $singleContent=include_template("single-template.php");
 

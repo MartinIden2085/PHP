@@ -18,7 +18,7 @@
                 <?php if ($isAuth===true): ?>
                     <a class="btn btn-success" href="add-post.php" role="button">Добавить пост</a>
                     <a class="btn btn-warning" href="#" role="button">Мои посты</a>
-                    <a class="btn btn-secondary" href="/auth" role="button">Выйти</a>
+                    <a class="btn btn-secondary" href="/logout.php" role="button">Выйти</a>
                 <?php else: ?>
                     <a class="btn btn-primary" href="/register.php" role="button">Регистрация</a>
                     <a class="btn btn-primary" href="/login.php" role="button">Войти</a>

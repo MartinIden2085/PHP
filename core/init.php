@@ -1,9 +1,8 @@
 <?php
-require_once ('core/helpers.php');
+require_once ("core/helpers.php");
+require_once ("core/functions.php");
 
-$db=(require_once('PHP/core/config.php'))['db'];
-
-
+$db=(require_once("core/config.php"))['db'];
 $dsn="{$db['driver']}:host={$db['host']};dbname{$db['name']};charset={$db['charset']}";
 $options=[
     PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
@@ -19,3 +18,8 @@ try{
 
 $categoriesObject=$con->query('SELECT * from categories');
 $categories=$categoriesObject->fetchAll();
+
+session_start();
+$isAuth=isset($_SESSION["user_id"]);
+
+?>

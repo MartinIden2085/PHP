@@ -7,9 +7,31 @@ require_once ("core/init.php");
  * @var PDO $con
  * @var Array $categories
  */
+$errors=[];
+$user=$_POST;
+$rules=[
+    'name'=>function(){
+    return validateFilled('name');
+    },
+    'email' => function(){
+    return validateEmail('email');
+    },
+    'password' =>function(){
+    return validateFilled('password');
+    }
+];
 
-if($_SERVER['REQUEST_METHOD']=='POST'){
-    $user=$_POST;
+
+
+if($_SERVER['REQUEST_METHOD']=='POST' ){
+    foreach ($user as $key => $value){
+        if(isset($rules[$key])){
+            $rule=$rules[$key];
+            $errors[$key]=$rule();
+        }
+    }
+    if($_SERVER['REQUEST_METHOD']=='POST' && empty($errors)){
+
     $user['password']=password_hash($user['password'], PASSWORD_DEFAULT); //хэшируем пароль(валера не трогай комментарий, мне нужно)
 
     //выполняем запрос на получение пользователя с указанным email
@@ -22,15 +44,18 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     } else{
         $stmt=$con->prepare('INSERT INTO users SET name=:name, email=:email, password=:password');
         $stmt->execute($user);
+        header("Location: login.php");
     }
-
+    }
 }
 
-$isAuth = (bool) rand(0,1);
-
+$registerContent=include_template('templates/register-template.php',[
+    'errors'=>$errors
+]);
 $page =include_template('layout.php',[
     'isAuth'=>$isAuth,
     'content'=>$registerContent
 ]);
+
 print ($page);
 ?>
