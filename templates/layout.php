@@ -16,7 +16,7 @@
             </div>
             <div class="col-md-8 text-md-right text-end">
                 <?php if ($isAuth===true): ?>
-                    <a class="btn btn-success" href="add-post.php" role="button">Добавить пост</a>
+                    <a class="btn btn-success" href="../add-post.php" role="button">Добавить пост</a>
                     <a class="btn btn-warning" href="#" role="button">Мои посты</a>
                     <a class="btn btn-secondary" href="/logout.php" role="button">Выйти</a>
                 <?php else: ?>

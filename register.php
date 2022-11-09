@@ -9,6 +9,7 @@ require_once ("core/init.php");
  */
 $errors=[];
 $user=$_POST;
+
 $rules=[
     'name'=>function(){
     return validateFilled('name');
@@ -32,7 +33,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' ){
     }
     if($_SERVER['REQUEST_METHOD']=='POST' && empty($errors)){
 
-    $user['password']=password_hash($user['password'], PASSWORD_DEFAULT); //хэшируем пароль(валера не трогай комментарий, мне нужно)
+    $user['password']=password_hash($user['password'], PASSWORD_DEFAULT); //хэшируем пароль
 
     //выполняем запрос на получение пользователя с указанным email
     $stmt=$con->prepare('SELECT * from users WHERE email=:email');
@@ -49,7 +50,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' ){
     }
 }
 
-$registerContent=include_template('templates/register-template.php',[
+$registerContent=include_template('register-template.php',[
     'errors'=>$errors
 ]);
 $page =include_template('layout.php',[

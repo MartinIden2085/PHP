@@ -5,13 +5,14 @@ require_once("core/init.php");
 /**
  * @var PDO $con
  */
+
 $errors=[];
 $user=$_POST;
 $rules=[
-    "email" => function(){
-    return validateEmail("email");
+    'email' => function(){
+    return validateEmail('email');
     },
-    "password" => function(){
+    'password' => function(){
     return validateFilled('password');
     }
 ];

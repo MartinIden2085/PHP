@@ -2,8 +2,8 @@
 require_once ("core/helpers.php");
 require_once ("core/functions.php");
 
-$db=(require_once("core/config.php"))['db'];
-$dsn="{$db['driver']}:host={$db['host']};dbname{$db['name']};charset={$db['charset']}";
+$db=(require_once('core/config.php'))['db'];
+$dsn="{$db['driver']}:host={$db['host']};dbname={$db['name']};charset={$db['charset']}";
 $options=[
     PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,
