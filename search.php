@@ -7,11 +7,11 @@ require_once ('core/init.php');
  * @var bool $isAuth
  */
 
-$searchText=filter_input(INPUT_GET, 'search',FILTER_SANITIZE_STRING);
+$searchText=filter_input(INPUT_GET, 'search',FILTER_UNSAFE_RAW);
 
 $stmt = $con->prepare('SELECT p.id,
                                  p.title,
-                                 p.img,
+                                 p.img_url,
                                  c.title AS category
                                  FROM posts p 
                                  JOIN categories c ON p.category_id = c.id

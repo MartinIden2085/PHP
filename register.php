@@ -31,6 +31,8 @@ if($_SERVER['REQUEST_METHOD']=='POST' ){
             $errors[$key]=$rule();
         }
     }
+}
+$errors=array_filter($errors);
     if($_SERVER['REQUEST_METHOD']=='POST' && empty($errors)){
 
     $user['password']=password_hash($user['password'], PASSWORD_DEFAULT); //хэшируем пароль
@@ -47,9 +49,8 @@ if($_SERVER['REQUEST_METHOD']=='POST' ){
         $stmt->execute($user);
         header("Location: login.php");
     }
-    }
+    
 }
-
 $registerContent=include_template('register-template.php',[
     'errors'=>$errors
 ]);
