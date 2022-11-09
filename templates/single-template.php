@@ -1,8 +1,8 @@
 <div class="container">
         <div class="row justify-content-center m-3">
             <div class="col-6">
-                <form action="">
-                    <input type="text" class="form-control" placeholder="Поиск. Введи название и нажмите Enter">
+                <form action="search.php">
+                    <input type="text" name="search" class="form-control" placeholder="Поиск. Введи название и нажмите Enter">
                 </form>
             </div>
         </div>
