@@ -49,7 +49,7 @@ $errors=array_filter($errors);
         $stmt->execute($user);
         header("Location: login.php");
     }
-    
+
 }
 $registerContent=include_template('register-template.php',[
     'errors'=>$errors
